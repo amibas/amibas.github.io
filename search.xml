@@ -8,38 +8,6 @@
       <link href="/post/1b851995.html"/>
       <url>/post/1b851995.html</url>
       
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Hello world!</title>
-      <link href="/post/1b851995.html"/>
-      <url>/post/1b851995.html</url>
-      
-        <content type="html"><![CDATA[<h1 id="Hello-World是万物起源"><a href="#Hello-World是万物起源" class="headerlink" title="Hello World是万物起源"></a>Hello World是万物起源</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello World!&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>锟斤拷<br>锟斤拷<br>锟斤拷<br>锟斤拷<br>锟斤拷<br>锟斤拷</p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 万物起源 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Hello World</title>
-      <link href="/post/undefined.html"/>
-      <url>/post/undefined.html</url>
-      
         <content type="html"><![CDATA[<h1 id="Hello-World是万物起源"><a href="#Hello-World是万物起源" class="headerlink" title="Hello World是万物起源"></a>Hello World是万物起源</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello World!&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>锟斤拷<br>锟斤拷<br>锟斤拷<br>锟斤拷<br>锟斤拷<br>锟斤拷</p>]]></content>
       
       
