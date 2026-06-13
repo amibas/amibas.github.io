@@ -5,7 +5,6 @@ import type { Post } from '../../src/utils/posts';
 function createPost(overrides: Partial<Post> = {}): Post {
   return {
     id: 'test',
-    slug: 'test',
     body: 'body content',
     collection: 'posts',
     data: {
@@ -20,11 +19,11 @@ function createPost(overrides: Partial<Post> = {}): Post {
 
 describe('buildSearchIndex', () => {
   it('maps posts to search entries', () => {
-    const posts = [createPost({ slug: 'hello', body: 'Hello world' })];
+    const posts = [createPost({ id: 'hello', body: 'Hello world' })];
     const index = buildSearchIndex(posts);
     expect(index).toEqual([
       {
-        slug: 'hello',
+        id: 'hello',
         title: 'Test',
         description: 'Test description',
         content: 'Hello world',

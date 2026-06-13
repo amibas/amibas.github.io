@@ -10,32 +10,32 @@ const tags = getAllTags(posts);
 ---
 
 <BaseLayout title="我的博客 - 技术笔记与教程" description="一个记录技术笔记与教程的个人博客">
-  <section class="max-w-3xl mx-auto px-6 pt-16 pb-12">
-    <div class="mb-12">
-      <h1 class="text-4xl md:text-6xl font-display font-bold text-text-primary mb-4">
-        技术笔记与教程<span class="text-accent motion-safe:animate-pulse">▌</span>
+  <section class="max-w-5xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-20">
+    <div class="mb-16 md:mb-20">
+      <h1 class="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-text-primary mb-4">
+        技术笔记与教程
       </h1>
-      <p class="text-lg text-text-secondary max-w-2xl">
+      <p class="text-lg md:text-xl text-text-secondary leading-relaxed max-w-xl">
         记录学习、实践和思考。主要关注前端工程、开发工具和技术写作。
       </p>
     </div>
 
-    <div class="mb-12">
+    <div class="mb-16">
       <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-display font-bold text-text-primary">最近文章</h2>
-        <a href={`${import.meta.env.BASE_URL}blog`} class="text-sm">查看全部 &rarr;</a>
+        <h2 class="text-xl font-semibold tracking-tight text-text-primary">最近文章</h2>
+        <a href={`${import.meta.env.BASE_URL}blog`} class="text-sm font-medium">查看全部 &rarr;</a>
       </div>
       {recentPosts.length > 0 ? (
-        <div>
-          {recentPosts.map(post => <PostCard post={post} key={post.slug} />)}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          {recentPosts.map(post => <PostCard post={post} key={post.id} />)}
         </div>
       ) : (
         <p class="text-text-secondary">还没有文章，快去写一篇吧。</p>
       )}
     </div>
 
-    <div>
-      <h2 class="text-2xl font-display font-bold text-text-primary mb-4">标签</h2>
+    <div class="mt-16">
+      <h2 class="text-xl font-semibold tracking-tight text-text-primary mb-4">标签</h2>
       {tags.length > 0 ? <TagList tags={tags} /> : <p class="text-text-secondary">暂无标签</p>}
     </div>
   </section>

@@ -10,18 +10,18 @@ const { post } = Astro.props;
 const { title, description, pubDate, tags } = post.data;
 ---
 
-<article class="group border-b border-border py-6 last:border-0">
-  <a href={`${import.meta.env.BASE_URL}blog/${post.slug}/`} class="block no-underline" aria-labelledby={`post-title-${post.slug}`}>
-    <h3 id={`post-title-${post.slug}`} class="text-xl md:text-2xl font-display font-bold text-text-primary group-hover:text-accent transition-colors mb-2">
+<article class="group bg-bg-secondary rounded-2xl p-6 md:p-8 shadow-card hover:shadow-card-hover transition-all duration-300">
+  <a href={`${import.meta.env.BASE_URL}blog/${post.id}/`} class="block no-underline" aria-labelledby={`post-title-${post.id}`}>
+    <h3 id={`post-title-${post.id}`} class="text-lg md:text-xl font-semibold tracking-tight text-text-primary mb-2">
       {title}
     </h3>
-    <p class="text-text-secondary mb-3 line-clamp-2">{description}</p>
-    <div class="flex flex-wrap items-center gap-3 text-sm text-text-secondary">
+    <p class="text-text-secondary leading-relaxed line-clamp-2">{description}</p>
+    <div class="mt-4 flex flex-wrap items-center gap-3 text-xs text-text-secondary">
       <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
       <span>&middot;</span>
       <div class="flex flex-wrap gap-2">
         {tags.map(tag => (
-          <span class="px-2 py-0.5 rounded bg-bg-secondary border border-border">#{tag}</span>
+          <span class="px-2.5 py-1 rounded-full bg-bg-primary/50 text-xs font-medium">#{tag}</span>
         ))}
       </div>
     </div>

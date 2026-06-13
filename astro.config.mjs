@@ -9,4 +9,10 @@ export default defineConfig({
   base: '/',
   integrations: [tailwind(), mdx()],
   output: 'static',
+  server: {
+    // Bind to all loopback addresses so the dev server is reachable via both
+    // 127.0.0.1 (IPv4) and [::1] (IPv6). This fixes WSL2 localhost forwarding
+    // from a Windows browser, which connects to 127.0.0.1 internally.
+    host: true,
+  },
 });

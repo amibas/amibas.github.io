@@ -22,12 +22,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
     <link rel="alternate" type="application/rss+xml" title="RSS Feed" href={`${import.meta.env.BASE_URL}rss.xml`} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap"
-      rel="stylesheet"
-    />
     <script is:inline>
       (function () {
         const theme = (() => {
@@ -47,22 +41,22 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     </script>
   </head>
   <body class="min-h-screen flex flex-col">
-    <header class="border-b border-border sticky top-0 bg-bg-primary/95 backdrop-blur z-50">
-      <nav class="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href={`${import.meta.env.BASE_URL}`} class="font-display text-xl font-bold text-text-primary hover:text-accent transition-colors">
+    <header class="sticky top-0 z-50 bg-bg-primary/80 backdrop-blur-xl shadow-sm">
+      <nav class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+        <a href={`${import.meta.env.BASE_URL}`} class="text-lg font-semibold tracking-tight text-text-primary hover:text-text-secondary transition-colors">
           我的博客
         </a>
-        <div class="flex items-center gap-4 md:gap-6 flex-wrap">
-          <a href={`${import.meta.env.BASE_URL}blog`} class="text-sm md:text-base text-text-secondary hover:text-accent transition-colors">
+        <div class="flex items-center gap-6 md:gap-8">
+          <a href={`${import.meta.env.BASE_URL}blog`} class="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors">
             文章
           </a>
-          <a href={`${import.meta.env.BASE_URL}tags`} class="text-sm md:text-base text-text-secondary hover:text-accent transition-colors">
+          <a href={`${import.meta.env.BASE_URL}tags`} class="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors">
             标签
           </a>
-          <a href={`${import.meta.env.BASE_URL}search`} class="text-sm md:text-base text-text-secondary hover:text-accent transition-colors">
+          <a href={`${import.meta.env.BASE_URL}search`} class="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors">
             搜索
           </a>
-          <a href={`${import.meta.env.BASE_URL}about`} class="text-sm md:text-base text-text-secondary hover:text-accent transition-colors">
+          <a href={`${import.meta.env.BASE_URL}about`} class="text-sm font-medium text-text-secondary hover:text-text-primary transition-colors">
             关于
           </a>
           <ThemeToggle />
@@ -74,8 +68,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
 
-    <footer class="border-t border-border py-8 mt-12">
-      <div class="max-w-3xl mx-auto px-6 text-center text-text-secondary text-sm">
+    <footer class="bg-bg-secondary py-12 mt-16">
+      <div class="max-w-5xl mx-auto px-6 text-center text-text-secondary text-sm">
         <p>&copy; {new Date().getFullYear()} 我的博客. All rights reserved.</p>
       </div>
     </footer>

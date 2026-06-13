@@ -5,10 +5,10 @@
     placeholder="输入关键词搜索文章..."
     autocomplete="off"
     aria-label="搜索文章"
-    class="w-full px-4 py-3 rounded-lg bg-bg-secondary border border-border text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-accent transition-colors"
+    class="w-full px-5 py-4 rounded-xl bg-bg-secondary shadow-sm text-base text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all"
   />
-  <ul id="search-results" class="mt-4 space-y-4"></ul>
-  <p id="search-status" class="mt-4 text-text-secondary text-sm hidden" aria-live="polite" role="status"></p>
+  <ul id="search-results" class="mt-6 space-y-4"></ul>
+  <p id="search-status" class="mt-6 text-text-secondary text-sm hidden" aria-live="polite" role="status"></p>
 </div>
 
 <script>
@@ -55,22 +55,22 @@
           resultsEl.innerHTML = '';
           results.forEach(result => {
             const li = document.createElement('li');
-            li.className = 'border-b border-border pb-4 last:border-0';
+            li.className = 'bg-bg-secondary rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow';
 
             const a = document.createElement('a');
-            a.href = `${baseUrl}blog/${result.item.slug}/`;
-            a.className = 'text-lg font-display font-bold text-text-primary hover:text-accent transition-colors';
+            a.href = `${baseUrl}blog/${result.item.id}/`;
+            a.className = 'block text-base font-semibold text-text-primary hover:text-accent transition-colors';
             a.textContent = result.item.title;
 
             const p = document.createElement('p');
-            p.className = 'text-text-secondary mt-1 line-clamp-2';
+            p.className = 'text-text-secondary mt-2 line-clamp-2';
             p.textContent = result.item.description;
 
             const tagsDiv = document.createElement('div');
-            tagsDiv.className = 'flex flex-wrap gap-2 mt-2';
+            tagsDiv.className = 'flex flex-wrap gap-2 mt-4';
             result.item.tags.forEach(tag => {
               const span = document.createElement('span');
-              span.className = 'text-xs text-text-secondary';
+              span.className = 'px-2.5 py-1 rounded-full bg-bg-primary/50 text-xs font-medium text-text-secondary';
               span.textContent = `#${tag}`;
               tagsDiv.appendChild(span);
             });

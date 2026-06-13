@@ -5,7 +5,6 @@ import type { Post } from '../../src/utils/posts';
 function createPost(overrides: Partial<Post> = {}): Post {
   return {
     id: 'test',
-    slug: 'test',
     body: '',
     collection: 'posts',
     data: {
@@ -54,16 +53,16 @@ describe('getAllTags', () => {
 describe('getPostsByTag', () => {
   it('filters posts by tag', () => {
     const posts = [
-      createPost({ slug: 'a', data: { title: 'A', description: 'D', pubDate: new Date(), tags: ['astro'] } }),
-      createPost({ slug: 'b', data: { title: 'B', description: 'D', pubDate: new Date(), tags: ['react'] } }),
+      createPost({ id: 'a', data: { title: 'A', description: 'D', pubDate: new Date(), tags: ['astro'] } }),
+      createPost({ id: 'b', data: { title: 'B', description: 'D', pubDate: new Date(), tags: ['react'] } }),
     ];
     expect(getPostsByTag(posts, 'astro')).toHaveLength(1);
-    expect(getPostsByTag(posts, 'astro')[0].slug).toBe('a');
+    expect(getPostsByTag(posts, 'astro')[0].id).toBe('a');
   });
 
   it('returns empty array when no posts match tag', () => {
     const posts = [
-      createPost({ slug: 'a', data: { title: 'A', description: 'D', pubDate: new Date(), tags: ['astro'] } }),
+      createPost({ id: 'a', data: { title: 'A', description: 'D', pubDate: new Date(), tags: ['astro'] } }),
     ];
     expect(getPostsByTag(posts, 'react')).toHaveLength(0);
   });
