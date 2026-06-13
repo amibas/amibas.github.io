@@ -15,7 +15,7 @@ function createPost(overrides: Partial<Post> = {}): Post {
       tags: ['astro'],
     },
     ...overrides,
-  } as Post;
+  } satisfies Post as Post;
 }
 
 describe('getReadingTime', () => {

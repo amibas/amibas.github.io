@@ -3,15 +3,15 @@ import type { CollectionEntry } from 'astro:content';
 export type Post = CollectionEntry<'posts'>;
 
 export async function getAllPosts(): Promise<Post[]> {
+  // Dynamic import avoids resolving the Astro virtual module `astro:content`
+  // when this file is loaded by Vitest for unit tests of the pure utilities.
   const { getCollection } = await import('astro:content');
   const posts = await getCollection('posts');
   return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }
 
 export function getAllTags(posts: Post[]): string[] {
-  const tagSet = new Set<string>();
-  posts.forEach(post => post.data.tags.forEach(tag => tagSet.add(tag)));
-  return Array.from(tagSet).sort();
+  return Array.from(new Set(posts.flatMap(post => post.data.tags))).sort();
 }
 
 export function getPostsByTag(posts: Post[], tag: string): Post[] {
