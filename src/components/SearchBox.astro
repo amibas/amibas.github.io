@@ -1,14 +1,33 @@
 <div class="search-container">
-  <input
-    id="search-input"
-    type="text"
-    placeholder="输入关键词搜索文章..."
-    autocomplete="off"
-    aria-label="搜索文章"
-    class="w-full px-5 py-4 rounded-xl bg-bg-secondary shadow-sm text-base text-text-primary placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all"
-  />
-  <ul id="search-results" class="mt-6 space-y-4"></ul>
-  <p id="search-status" class="mt-6 text-text-secondary text-sm hidden" aria-live="polite" role="status"></p>
+  <label for="search-input" class="block text-sm font-medium text-text-secondary mb-2">搜索文章</label>
+  <div class="relative">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="absolute left-5 top-1/2 -translate-y-1/2 text-text-secondary pointer-events-none"
+      aria-hidden="true"
+    >
+      <circle cx="11" cy="11" r="8"/>
+      <path d="m21 21-4.3-4.3"/>
+    </svg>
+    <input
+      id="search-input"
+      type="text"
+      placeholder="输入关键词..."
+      autocomplete="off"
+      aria-label="搜索文章"
+      class="w-full pl-12 pr-5 py-4 rounded-2xl bg-bg-secondary border-[3px] border-white/50 dark:border-white/10 shadow-clay text-base text-text-primary placeholder:text-text-secondary focus:outline-none focus:shadow-clay-hover focus:border-accent/30 transition-all ease-clay"
+    />
+  </div>
+  <ul id="search-results" class="mt-6 space-y-4" aria-label="搜索结果"></ul>
+  <p id="search-status" class="mt-6 text-text-secondary text-sm sr-only" aria-live="polite" role="status"></p>
 </div>
 
 <script>
@@ -19,76 +38,95 @@
   const resultsEl = document.getElementById('search-results') as HTMLUListElement;
   const statusEl = document.getElementById('search-status') as HTMLParagraphElement;
 
-  async function initSearch() {
-    try {
-      const baseUrl = import.meta.env.BASE_URL ?? '/';
-      const res = await fetch(`${baseUrl}search.json`);
-      if (!res.ok) throw new Error('Failed to load search index');
-      const posts: SearchEntry[] = await res.json();
+  let fuse: Fuse<SearchEntry> | null = null;
+  let debounceTimer: ReturnType<typeof setTimeout>;
 
-      const fuse = new Fuse(posts, {
-        keys: ['title', 'description', 'content', 'tags'],
-        threshold: 0.3,
-      });
+  async function loadSearchIndex() {
+    const baseUrl = import.meta.env.BASE_URL ?? '/';
+    const res = await fetch(`${baseUrl}search.json`);
+    if (!res.ok) throw new Error('Failed to load search index');
+    const posts: SearchEntry[] = await res.json();
 
-      let debounceTimer: ReturnType<typeof setTimeout>;
-
-      input.addEventListener('input', () => {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-          const query = input.value.trim();
-          statusEl.classList.add('hidden');
-
-          if (!query) {
-            resultsEl.innerHTML = '';
-            return;
-          }
-
-          const results = fuse.search(query);
-          if (results.length === 0) {
-            resultsEl.innerHTML = '';
-            statusEl.textContent = `没有找到与 "${query}" 相关的文章。`;
-            statusEl.classList.remove('hidden');
-            return;
-          }
-
-          resultsEl.innerHTML = '';
-          results.forEach(result => {
-            const li = document.createElement('li');
-            li.className = 'bg-bg-secondary rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow';
-
-            const a = document.createElement('a');
-            a.href = `${baseUrl}blog/${result.item.id}/`;
-            a.className = 'block text-base font-semibold text-text-primary hover:text-accent transition-colors';
-            a.textContent = result.item.title;
-
-            const p = document.createElement('p');
-            p.className = 'text-text-secondary mt-2 line-clamp-2';
-            p.textContent = result.item.description;
-
-            const tagsDiv = document.createElement('div');
-            tagsDiv.className = 'flex flex-wrap gap-2 mt-4';
-            result.item.tags.forEach(tag => {
-              const span = document.createElement('span');
-              span.className = 'px-2.5 py-1 rounded-full bg-bg-primary/50 text-xs font-medium text-text-secondary';
-              span.textContent = `#${tag}`;
-              tagsDiv.appendChild(span);
-            });
-
-            li.appendChild(a);
-            li.appendChild(p);
-            li.appendChild(tagsDiv);
-            resultsEl.appendChild(li);
-          });
-        }, 200);
-      });
-    } catch (error) {
-      console.error('Search initialization failed:', error);
-      statusEl.textContent = '搜索暂不可用，请直接浏览文章列表。';
-      statusEl.classList.remove('hidden');
-      input.disabled = true;
-    }
+    fuse = new Fuse(posts, {
+      keys: ['title', 'description', 'content', 'tags'],
+      threshold: 0.3,
+    });
   }
 
-  initSearch();
+  async function performSearch() {
+    if (!fuse) {
+      statusEl.textContent = '正在加载搜索索引...';
+      try {
+        await loadSearchIndex();
+      } catch (error) {
+        console.error('Search initialization failed:', error);
+        statusEl.textContent = '搜索暂不可用，请直接浏览文章列表。';
+        input.disabled = true;
+        return;
+      }
+    }
+
+    const query = input.value.trim();
+
+    if (!query) {
+      resultsEl.innerHTML = '';
+      statusEl.textContent = '';
+      return;
+    }
+
+    const results = fuse.search(query);
+    if (results.length === 0) {
+      resultsEl.innerHTML = '';
+      statusEl.textContent = `没有找到与 "${query}" 相关的文章。`;
+      return;
+    }
+
+    statusEl.textContent = `找到 ${results.length} 篇与 "${query}" 相关的文章。`;
+    resultsEl.innerHTML = '';
+    results.forEach((result, index) => {
+      const li = document.createElement('li');
+      li.className = 'bg-bg-secondary rounded-3xl p-6 border-[3px] border-white/50 dark:border-white/10 shadow-clay hover:shadow-clay-hover hover:-translate-y-0.5 transition-all duration-300 ease-clay animate-fade-in-up';
+      li.style.animationDelay = `${index * 0.06}s`;
+
+      const a = document.createElement('a');
+      a.href = `${import.meta.env.BASE_URL ?? '/'}blog/${result.item.id}/`;
+      a.className = 'block text-base font-semibold tracking-wide text-text-primary hover:text-accent transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-bg-secondary rounded-lg';
+      a.textContent = result.item.title;
+
+      const p = document.createElement('p');
+      p.className = 'text-text-secondary mt-2 line-clamp-2';
+      p.textContent = result.item.description;
+
+      const tagsDiv = document.createElement('div');
+      tagsDiv.className = 'flex flex-wrap gap-2 mt-4';
+      result.item.tags.forEach(tag => {
+        const span = document.createElement('span');
+        span.className = 'px-2.5 py-1 rounded-full bg-bg-primary/50 border border-white/30 dark:border-white/10 text-xs font-medium text-text-secondary';
+        span.textContent = `#${tag}`;
+        tagsDiv.appendChild(span);
+      });
+
+      li.appendChild(a);
+      li.appendChild(p);
+      li.appendChild(tagsDiv);
+      resultsEl.appendChild(li);
+    });
+  }
+
+  function handleFirstInteraction() {
+    input.removeEventListener('focus', handleFirstInteraction);
+    input.removeEventListener('input', handleFirstInteraction);
+    void performSearch();
+  }
+
+  input.addEventListener('focus', handleFirstInteraction, { once: true });
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(performSearch, 200);
+  });
+
+  // Load eagerly if the input already has a value (e.g. browser autofill).
+  if (input.value.trim()) {
+    void performSearch();
+  }
 </script>

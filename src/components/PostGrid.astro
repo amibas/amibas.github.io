@@ -1,0 +1,26 @@
+---
+import PostCard from './PostCard.astro';
+import type { Post } from '../utils/posts';
+
+interface Props {
+  posts: Post[];
+  baseDelay?: number;
+  stagger?: number;
+}
+
+const { posts, baseDelay = 0.1, stagger = 0.05 } = Astro.props;
+---
+
+{posts.length > 0 ? (
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+    {posts.map((post, i) => (
+      <div class="animate-fade-in-up" style={`animation-delay: ${baseDelay + i * stagger}s;`}>
+        <PostCard post={post} />
+      </div>
+    ))}
+  </div>
+) : (
+  <slot name="empty">
+    <p class="text-text-secondary">还没有文章。</p>
+  </slot>
+)}

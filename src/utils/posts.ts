@@ -7,7 +7,10 @@ export async function getAllPosts(): Promise<Post[]> {
   // when this file is loaded by Vitest for unit tests of the pure utilities.
   const { getCollection } = await import('astro:content');
   const posts = await getCollection('posts');
-  return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  const published = import.meta.env.PROD
+    ? posts.filter(post => !post.data.draft)
+    : posts;
+  return published.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }
 
 export function getAllTags(posts: Post[]): string[] {
@@ -19,9 +22,20 @@ export function getPostsByTag(posts: Post[], tag: string): Post[] {
 }
 
 export function getReadingTime(content: string): number {
-  const wordsPerMinute = 200;
-  const words = content.trim().split(/\s+/).filter(Boolean).length;
-  return Math.max(1, Math.ceil(words / wordsPerMinute));
+  // Count CJK characters individually (Chinese/Japanese/Korean do not use spaces).
+  const cjkPattern = /[一-鿿぀-ゟ゠-ヿ가-힯]/g;
+  const cjkChars = content.match(cjkPattern)?.length || 0;
+
+  // Count Latin words by whitespace after removing CJK characters.
+  const latinWords = content
+    .replace(cjkPattern, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+
+  // ~400 CJK chars/min and ~200 Latin words/min.
+  const minutes = cjkChars / 400 + latinWords / 200;
+  return Math.max(1, Math.ceil(minutes));
 }
 
 export function formatDate(date: Date): string {

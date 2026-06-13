@@ -3,9 +3,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="关于 - 我的博客" description="关于博客和作者">
-  <section class="max-w-4xl mx-auto px-6 py-16 md:py-20">
-    <h1 class="text-2xl md:text-3xl font-semibold tracking-tight text-text-primary mb-8">关于</h1>
-    <div class="prose max-w-none">
+  <section class="max-w-4xl mx-auto px-6 py-16 md:py-20 relative">
+    <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-accent/8 blur-3xl animate-blob pointer-events-none" aria-hidden="true"></div>
+
+    <div class="animate-fade-in-up">
+      <div class="flex items-center gap-3 mb-8">
+        <span class="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+        <h1 class="text-2xl md:text-3xl font-semibold tracking-wide text-text-primary">关于</h1>
+      </div>
+    </div>
+
+    <div class="prose max-w-none p-6 md:p-8 rounded-3xl bg-bg-secondary border-[3px] border-white/50 dark:border-white/10 shadow-clay animate-fade-in-up stagger-2">
       <p>
         这是一个由 Astro 构建的个人博客，主要用于记录技术笔记、教程和开发过程中的思考。
       </p>
@@ -13,8 +21,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         如果你对这里的内容感兴趣，可以通过以下方式找到我：
       </p>
       <ul>
-        <li>GitHub: <a href="https://github.com/your-username" target="_blank" rel="noopener noreferrer">@your-username</a></li>
-        <li>Email: <a href="mailto:your@email.com">your@email.com</a></li>
+        <li>GitHub: <a href="https://github.com/amibas" target="_blank" rel="noopener noreferrer">@amibas</a></li>
+        <li>Email: <a href="mailto:towsod@outlook.com">towsod@outlook.com</a></li>
       </ul>
       <p>
         欢迎交流！

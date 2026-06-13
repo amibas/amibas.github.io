@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
+import PostGrid from '../../components/PostGrid.astro';
 import { getAllPosts, getAllTags } from '../../utils/posts';
 
 export async function getStaticPaths() {
@@ -16,21 +16,20 @@ const taggedPosts = posts.filter(post => post.data.tags.includes(tag));
 
 <BaseLayout title={`标签 #${tag} - 我的博客`} description={`标签 #${tag} 下的文章`}>
   <section class="max-w-5xl mx-auto px-6 py-16 md:py-20">
-    <div class="mb-8">
+    <div class="mb-8 animate-fade-in-up">
       <a href={`${import.meta.env.BASE_URL}blog`} class="inline-flex items-center gap-1 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
         返回全部文章
       </a>
-      <h1 class="text-2xl md:text-3xl font-semibold tracking-tight text-text-primary mt-6">
-        #{tag}
-      </h1>
+      <div class="flex items-center gap-3 mt-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-accent-secondary" aria-hidden="true"></span>
+        <h1 class="text-2xl md:text-3xl font-semibold tracking-wide text-text-primary">#{tag}</h1>
+      </div>
       <p class="text-sm text-text-secondary mt-2">共 {taggedPosts.length} 篇文章</p>
     </div>
 
     {taggedPosts.length > 0 ? (
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-        {taggedPosts.map(post => <PostCard post={post} />)}
-      </div>
+      <PostGrid posts={taggedPosts} />
     ) : (
       <p class="text-text-secondary">该标签下没有文章。</p>
     )}

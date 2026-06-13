@@ -13,7 +13,7 @@ export function buildSearchIndex(posts: Post[]): SearchEntry[] {
     id: post.id,
     title: post.data.title,
     description: post.data.description,
-    content: post.body,
+    content: post.body.slice(0, 500),
     tags: post.data.tags,
   }));
 }
