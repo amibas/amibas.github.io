@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getAllPosts } from '../../utils/posts';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const posts = await getAllPosts();
+const currentIndex = posts.findIndex(p => p.slug === post.slug);
+const olderPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
+const newerPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
+---
+
+<PostLayout post={post}>
+  <Content />
+
+  <nav aria-label="文章导航" class="mt-12 pt-8 border-t border-border grid grid-cols-1 md:grid-cols-2 gap-6">
+    {olderPost && (
+      <div>
+        <a href={`${import.meta.env.BASE_URL}blog/${olderPost.slug}/`} class="block group no-underline">
+          <span class="text-sm text-text-secondary block mb-1"><span aria-hidden="true">&larr;</span> 上一篇</span>
+          <span class="font-display font-bold text-text-primary group-hover:text-accent transition-colors">
+            {olderPost.data.title}
+          </span>
+        </a>
+      </div>
+    )}
+    {newerPost && (
+      <div class="md:text-right">
+        <a href={`${import.meta.env.BASE_URL}blog/${newerPost.slug}/`} class="block group no-underline">
+          <span class="text-sm text-text-secondary block mb-1">下一篇 <span aria-hidden="true">&rarr;</span></span>
+          <span class="font-display font-bold text-text-primary group-hover:text-accent transition-colors">
+            {newerPost.data.title}
+          </span>
+        </a>
+      </div>
+    )}
+  </nav>
+</PostLayout>

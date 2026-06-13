@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg-primary text-text-primary font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+
+  a {
+    @apply text-accent transition-colors;
+  }
+
+  a:hover {
+    @apply underline;
+  }
+
+  code {
+    @apply font-mono text-sm;
+  }
+
+  pre {
+    @apply rounded-lg border border-border;
+  }
+
+  ::selection {
+    @apply bg-accent/30 text-text-primary;
+  }
+}
+

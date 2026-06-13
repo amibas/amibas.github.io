@@ -1,0 +1,29 @@
+---
+import { formatDate } from '../utils/posts';
+import type { Post } from '../utils/posts';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, tags } = post.data;
+---
+
+<article class="group border-b border-border py-6 last:border-0">
+  <a href={`${import.meta.env.BASE_URL}blog/${post.slug}/`} class="block no-underline" aria-labelledby={`post-title-${post.slug}`}>
+    <h3 id={`post-title-${post.slug}`} class="text-xl md:text-2xl font-display font-bold text-text-primary group-hover:text-accent transition-colors mb-2">
+      {title}
+    </h3>
+    <p class="text-text-secondary mb-3 line-clamp-2">{description}</p>
+    <div class="flex flex-wrap items-center gap-3 text-sm text-text-secondary">
+      <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+      <span>&middot;</span>
+      <div class="flex flex-wrap gap-2">
+        {tags.map(tag => (
+          <span class="px-2 py-0.5 rounded bg-bg-secondary border border-border">#{tag}</span>
+        ))}
+      </div>
+    </div>
+  </a>
+</article>

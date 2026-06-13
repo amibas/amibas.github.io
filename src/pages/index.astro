@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import TagList from '../components/TagList.astro';
+import { getAllPosts, getAllTags } from '../utils/posts';
+
+const posts = await getAllPosts();
+const recentPosts = posts.slice(0, 5);
+const tags = getAllTags(posts);
+---
+
+<BaseLayout title="我的博客 - 技术笔记与教程" description="一个记录技术笔记与教程的个人博客">
+  <section class="max-w-3xl mx-auto px-6 pt-16 pb-12">
+    <div class="mb-12">
+      <h1 class="text-4xl md:text-6xl font-display font-bold text-text-primary mb-4">
+        技术笔记与教程<span class="text-accent motion-safe:animate-pulse">▌</span>
+      </h1>
+      <p class="text-lg text-text-secondary max-w-2xl">
+        记录学习、实践和思考。主要关注前端工程、开发工具和技术写作。
+      </p>
+    </div>
+
+    <div class="mb-12">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-display font-bold text-text-primary">最近文章</h2>
+        <a href={`${import.meta.env.BASE_URL}blog`} class="text-sm">查看全部 &rarr;</a>
+      </div>
+      {recentPosts.length > 0 ? (
+        <div>
+          {recentPosts.map(post => <PostCard post={post} key={post.slug} />)}
+        </div>
+      ) : (
+        <p class="text-text-secondary">还没有文章，快去写一篇吧。</p>
+      )}
+    </div>
+
+    <div>
+      <h2 class="text-2xl font-display font-bold text-text-primary mb-4">标签</h2>
+      {tags.length > 0 ? <TagList tags={tags} /> : <p class="text-text-secondary">暂无标签</p>}
+    </div>
+  </section>
+</BaseLayout>
