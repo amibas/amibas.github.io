@@ -15,7 +15,7 @@
   "dependencies": {
     "@astrojs/mdx": "^2.0.0",
     "@astrojs/rss": "^4.0.0",
-    "@astrojs/tailwind": "^5.0.0",
+    "@astrojs/tailwind": "^4.0.0",
     "@tailwindcss/typography": "^0.5.10",
     "astro": "^4.0.0",
     "fuse.js": "^7.0.0",

@@ -19,3 +19,17 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# deployment platforms
+.vercel
+.netlify
+
+# local env files
+*.local
+
+# editors
+.vscode/
+.idea/
+
+# Windows
+Thumbs.db
