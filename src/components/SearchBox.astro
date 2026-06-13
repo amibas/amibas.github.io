@@ -4,10 +4,11 @@
     type="text"
     placeholder="输入关键词搜索文章..."
     autocomplete="off"
+    aria-label="搜索文章"
     class="w-full px-4 py-3 rounded-lg bg-bg-secondary border border-border text-text-primary placeholder:text-text-secondary focus:outline-none focus:border-accent transition-colors"
   />
   <ul id="search-results" class="mt-4 space-y-4"></ul>
-  <p id="search-status" class="mt-4 text-text-secondary text-sm hidden"></p>
+  <p id="search-status" class="mt-4 text-text-secondary text-sm hidden" aria-live="polite" role="status"></p>
 </div>
 
 <script>
@@ -26,45 +27,63 @@
       const posts: SearchEntry[] = await res.json();
 
       const fuse = new Fuse(posts, {
-        keys: ['title', 'description', 'content'],
+        keys: ['title', 'description', 'content', 'tags'],
         threshold: 0.3,
-        includeScore: true,
       });
+
+      let debounceTimer: ReturnType<typeof setTimeout>;
 
       input.addEventListener('input', () => {
-        const query = input.value.trim();
-        statusEl.classList.add('hidden');
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          const query = input.value.trim();
+          statusEl.classList.add('hidden');
 
-        if (!query) {
+          if (!query) {
+            resultsEl.innerHTML = '';
+            return;
+          }
+
+          const results = fuse.search(query);
+          if (results.length === 0) {
+            resultsEl.innerHTML = '';
+            statusEl.textContent = `没有找到与 "${query}" 相关的文章。`;
+            statusEl.classList.remove('hidden');
+            return;
+          }
+
           resultsEl.innerHTML = '';
-          return;
-        }
+          results.forEach(result => {
+            const li = document.createElement('li');
+            li.className = 'border-b border-border pb-4 last:border-0';
 
-        const results = fuse.search(query);
-        if (results.length === 0) {
-          resultsEl.innerHTML = '';
-          statusEl.textContent = `没有找到与 "${query}" 相关的文章。`;
-          statusEl.classList.remove('hidden');
-          return;
-        }
+            const a = document.createElement('a');
+            a.href = `${baseUrl}blog/${result.item.slug}/`;
+            a.className = 'text-lg font-display font-bold text-text-primary hover:text-accent transition-colors';
+            a.textContent = result.item.title;
 
-        resultsEl.innerHTML = results
-          .map(
-            result => `
-            <li class="border-b border-border pb-4 last:border-0">
-              <a href="${baseUrl}blog/${result.item.slug}/" class="text-lg font-display font-bold text-text-primary hover:text-accent transition-colors">
-                ${result.item.title}
-              </a>
-              <p class="text-text-secondary mt-1 line-clamp-2">${result.item.description}</p>
-              <div class="flex flex-wrap gap-2 mt-2">
-                ${result.item.tags.map(tag => `<span class="text-xs text-text-secondary">#${tag}</span>`).join('')}
-              </div>
-            </li>
-          `
-          )
-          .join('');
+            const p = document.createElement('p');
+            p.className = 'text-text-secondary mt-1 line-clamp-2';
+            p.textContent = result.item.description;
+
+            const tagsDiv = document.createElement('div');
+            tagsDiv.className = 'flex flex-wrap gap-2 mt-2';
+            result.item.tags.forEach(tag => {
+              const span = document.createElement('span');
+              span.className = 'text-xs text-text-secondary';
+              span.textContent = `#${tag}`;
+              tagsDiv.appendChild(span);
+            });
+
+            li.appendChild(a);
+            li.appendChild(p);
+            li.appendChild(tagsDiv);
+            resultsEl.appendChild(li);
+          });
+        }, 200);
       });
     } catch (error) {
+      console.error('Search initialization failed:', error);
       statusEl.textContent = '搜索暂不可用，请直接浏览文章列表。';
       statusEl.classList.remove('hidden');
       input.disabled = true;
