@@ -5,7 +5,7 @@ export async function GET(context) {
   const posts = await getAllPosts();
 
   return rss({
-    title: '我的博客',
+    title: 'amoeba的博客',
     description: '技术笔记与教程',
     site: context.site,
     items: posts.map(post => ({
