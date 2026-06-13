@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getAllPosts } from '../../utils/posts';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const posts = await getAllPosts();
+const currentIndex = posts.findIndex(p => p.slug === post.slug);
+const prevPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
+const nextPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
+---
+
+<PostLayout post={post}>
+  <Content />
+
+  <nav class="mt-12 pt-8 border-t border-border grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      {prevPost && (
+        <a href={`${import.meta.env.BASE_URL}blog/${prevPost.slug}/`} class="block group no-underline">
+          <span class="text-sm text-text-secondary block mb-1">&larr; 上一篇</span>
+          <span class="font-display font-bold text-text-primary group-hover:text-accent transition-colors">
+            {prevPost.data.title}
+          </span>
+        </a>
+      )}
+    </div>
+    <div class="md:text-right">
+      {nextPost && (
+        <a href={`${import.meta.env.BASE_URL}blog/${nextPost.slug}/`} class="block group no-underline">
+          <span class="text-sm text-text-secondary block mb-1">下一篇 &rarr;</span>
+          <span class="font-display font-bold text-text-primary group-hover:text-accent transition-colors">
+            {nextPost.data.title}
+          </span>
+        </a>
+      )}
+    </div>
+  </nav>
+</PostLayout>
