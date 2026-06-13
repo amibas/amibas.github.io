@@ -19,7 +19,7 @@ const tags = getAllTags(posts);
 
     {posts.length > 0 ? (
       <div>
-        {posts.map(post => <PostCard post={post} key={post.slug} />)}
+        {posts.map(post => <PostCard post={post} />)}
       </div>
     ) : (
       <p class="text-text-secondary">还没有文章。</p>

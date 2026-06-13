@@ -26,7 +26,7 @@ const taggedPosts = posts.filter(post => post.data.tags.includes(tag));
 
     {taggedPosts.length > 0 ? (
       <div>
-        {taggedPosts.map(post => <PostCard post={post} key={post.slug} />)}
+        {taggedPosts.map(post => <PostCard post={post} />)}
       </div>
     ) : (
       <p class="text-text-secondary">该标签下没有文章。</p>
